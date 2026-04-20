@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Rich Puga - Магазин, О проекте, Регистрация</title>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+        min-height: 100vh;
+    }
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .nav-buttons {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+        flex-wrap: wrap;
+    }
+    .nav-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        background: #e0e0e0;
+        cursor: pointer;
+        border-radius: 30px;
+        transition: all 0.3s;
+        font-weight: bold;
+    }
+    .nav-btn.active {
+        background: #008CBA;
+        color: white;
+    }
+    
+    .page {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+    .page.active-page {
+        display: block;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px);}
+        to { opacity: 1; transform: translateY(0);}
+    }
+    
+    .item {
+        display: flex;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+        background: #fafafa;
+    }
+    .item-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 15px;
+    }
+    .item-info {
+        flex: 1;
+    }
+    .quantity-input {
+        padding: 8px;
+        width: 80px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+    .total-cost {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 20px 0;
+        padding: 15px;
+        background: #e8f5e9;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .pay-btn {
+        background-color: #ff9800;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        cursor: pointer;
+        font-size: 18px;
+        border-radius: 30px;
+        width: 100%;
+        font-weight: bold;
+    }
+    .pay-btn:hover {
+        background-color: #f57c00;
+    }
+    
+    .register-form {
+        background: #f9f9f9;
+        padding: 25px;
+        border-radius: 16px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+    .submit-btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .submit-btn:hover {
+        background-color: #45a049;
+    }
+    .success-msg {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 20px;
+        text-align: center;
+        display: none;
+    }
+    h2 {
+        color: #2c3e50;
+        margin-top: 0;
+    }
+    
+    /* Стили для страницы "О проекте" */
+    .sponsors-section {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid #eee;
+    }
+    .sponsors-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        align-items: flex-start;
+        margin-top: 20px;
+    }
+    .sponsors-list {
+        flex: 2;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .sponsors-list li {
+        padding: 8px 12px;
+        margin: 5px 0;
+        background: #f0f0f0;
+        border-radius: 8px;
+        border-left: 4px solid #008CBA;
+    }
+    .sponsors-image {
+        flex: 1;
+        text-align: center;
+    }
+    .sponsors-image img {
+        max-width: 100%;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 600px) {
+        .container { padding: 16px; }
+        .item { flex-direction: column; text-align: center; }
+        .item-img { margin-right: 0; margin-bottom: 10px; }
+        .nav-btn { padding: 8px 14px; font-size: 14px; }
+        .sponsors-container { flex-direction: column; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-buttons">
+        <button class="nav-btn" data-page="shop">🛒 Магазин</button>
+        <button class="nav-btn" data-page="about">📖 О проекте</button>
+        <button class="nav-btn" data-page="register">📝 Регистрация</button>
+    </div>
+
+    <!-- СТРАНИЦА МАГАЗИНА -->
+    <div id="shopPage" class="page active-page">
+        <h2>🛍️ Наши товары</h2>
+        
+        <div class="item">
+            <img class="item-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRatU58C2EKs2_qSKj1jZGWaqEYwnp9Z0xI4A&s" alt="ГП 5">
+            <div class="item-info">
+                <strong>ГП 5</strong><br>
+                Доходность: 0,1% в месяц<br>
+                Цена: 50 руб.<br>
+                <input type="number" class="quantity-input" data-price="50" value="0" min="0" step="1">
+            </div>
+        </div>
+
+        <div class="item">
+            <img class="item-img" src="https://www.nfcom.ru/sites/default/files/tovar/grazhdanskii-protivogaz-gp-7-1796.jpg" alt="ГП 7">
+            <div class="item-info">
+                <strong>ГП 7</strong><br>
+                Доходность: 0,2% в месяц<br>
+                Цена: 150 руб.<br>
+                <input type="number" class="quantity-input" data-price="150" value="0" min="0" step="1">
+            </div>
+        </div>
+
+        <div class="item">
+            <img class="item-img" src="https://kombograd.ru/wp-content/uploads/2023/02/07294b7067be11ec879dd094662fc0d3_0e4a66aa08d011eea09ad094662fc0d3.jpg" alt="Нерехта">
+            <div class="item-info">
+                <strong>Нерехта</strong><br>
+                Доходность: 0,3% в месяц<br>
+                Цена: 250 руб.<br>
+                <input type="number" class="quantity-input" data-price="250" value="0" min="0" step="1">
+            </div>
+        </div>
+
+        <div class="item">
+            <img class="item-img" src="https://ir.ozone.ru/s3/multimedia-h/c1000/6470496041.jpg" alt="ПМК 2">
+            <div class="item-info">
+                <strong>ПМК 2</strong><br>
+                Доходность: 0,4% в месяц<br>
+                Цена: 450 руб.<br>
+                <input type="number" class="quantity-input" data-price="450" value="0" min="0" step="1">
+            </div>
+        </div>
+
+        <div class="item">
+            <img class="item-img" src="https://kombograd.ru/wp-content/uploads/2023/02/16bbc88c67bf11ec879dd094662fc0d3_c95bee3008cd11eea09ad094662fc0d3.jpg" alt="Хомяк">
+            <div class="item-info">
+                <strong>Хомяк</strong><br>
+                Доходность: 0,5% в месяц<br>
+                Цена: 500 руб.<br>
+                <input type="number" class="quantity-input" data-price="500" value="0" min="0" step="1">
+            </div>
+        </div>
+
+        <div class="total-cost" id="totalDisplay">💰 Общая стоимость: 0 руб.</div>
+        <button class="pay-btn" id="payNowBtn">💳 Перейти к оформлению</button>
+    </div>
+
+    <!-- СТРАНИЦА "О ПРОЕКТЕ" -->
+    <div id="aboutPage" class="page">
+        <h2>О проекте</h2>
+        
+        <!-- ОПИСАНИЕ ПРОЕКТА -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px; margin-bottom: 30px;">
+            <div style="flex: 1;">
+                <h3 style="color: #008CBA;">Проект rich puga</h3>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Rich puga это экономическая игра, где вы вкладываетесь в противогазы, а они как экономический вклад 
+                    в зависимости от своей стоимости и купленного количества умножают ваши деньги.
+                </p>
+            </div>
+            <div style="flex: 0 0 200px; text-align: center;">
+                <img src="https://i.ibb.co/B2ZqyJPc/5.jpg" alt="Проект Rich Puga" style="max-width: 100%; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            </div>
+        </div>
+        
+        <!-- СПОНСОРЫ (список слева, картинка https://i.ibb.co/vxfDvMW2/5.jpg справа) -->
+        <div class="sponsors-section">
+            <h3 style="color: #008CBA;">Наши спонсоры</h3>
+            <div class="sponsors-container">
+                <ul class="sponsors-list">
+                    <li>🏛️ Администрация пгт. Кадыкчан</li>
+                    <li>⛏️ Угольная шахта пгт. Кадыкчан</li>
+                    <li>🥩 Северский мясокомбинат</li>
+                    <li>🏫 Средняя образовательная школа №67 г. Томск</li>
+                    <li>🏗️ ЖБК-100</li>
+                    <li>🏭 КЗБ</li>
+                    <li>🏭 ХЗБ</li>
+                </ul>
+                <div class="sponsors-image">
+                    <img src="https://i.ibb.co/vxfDvMW2/5.jpg" alt="Спонсоры">
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- СТРАНИЦА РЕГИСТРАЦИИ -->
+    <div id="registerPage" class="page">
+        <h2>📋 Регистрация</h2>
+        <div class="register-form">
+            <div class="form-group">
+                <label>👤 Имя и фамилия</label>
+                <input type="text" id="regName" placeholder="Иван Иванов">
+            </div>
+            <div class="form-group">
+                <label>📧 Email</label>
+                <input type="email" id="regEmail" placeholder="ivan@example.com">
+            </div>
+            <div class="form-group">
+                <label>🔒 Пароль</label>
+                <input type="password" id="regPassword" placeholder="Минимум 6 символов">
+            </div>
+            <button class="submit-btn" id="registerSubmitBtn">✅ Зарегистрироваться</button>
+            <div id="registerSuccess" class="success-msg"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ
+    const pages = {
+        shop: document.getElementById('shopPage'),
+        about: document.getElementById('aboutPage'),
+        register: document.getElementById('registerPage')
+    };
+    const navBtns = document.querySelectorAll('.nav-btn');
+    
+    function switchPage(pageId) {
+        Object.values(pages).forEach(page => {
+            page.classList.remove('active-page');
+        });
+        pages[pageId].classList.add('active-page');
+        navBtns.forEach(btn => {
+            if(btn.dataset.page === pageId) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+    
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            switchPage(btn.dataset.page);
+        });
+    });
+    
+    // ПОДСЧЁТ СУММЫ В МАГАЗИНЕ
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+    const totalDisplay = document.getElementById('totalDisplay');
+    
+    function updateTotal() {
+        let total = 0;
+        quantityInputs.forEach(input => {
+            let qty = parseInt(input.value) || 0;
+            let price = parseInt(input.dataset.price);
+            if(qty > 0) total += qty * price;
+        });
+        totalDisplay.innerHTML = `💰 Общая стоимость: ${total} руб.`;
+    }
+    
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            if(this.value < 0) this.value = 0;
+            updateTotal();
+        });
+    });
+    
+    document.getElementById('payNowBtn').addEventListener('click', () => {
+        let total = 0;
+        quantityInputs.forEach(input => {
+            let qty = parseInt(input.value) || 0;
+            let price = parseInt(input.dataset.price);
+            if(qty > 0) total += qty * price;
+        });
+        if(total === 0) {
+            alert('Пожалуйста, выберите хотя бы один товар');
+            return;
+        }
+        switchPage('register');
+        alert(`Сумма заказа: ${total} руб. Заполните форму регистрации для оформления`);
+    });
+    
+    // ОТПРАВКА НА ПОЧТУ
+    const registerBtn = document.getElementById('registerSubmitBtn');
+    const successMsg = document.getElementById('registerSuccess');
+    
+    async function sendToEmail(formData) {
+        const formUrl = 'https://formsubmit.co/ajax/ankedov2@gmail.com';
+        const data = {
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            message: `Новая регистрация на Rich Puga!\nИмя: ${formData.name}\nEmail: ${formData.email}\nПароль: ${formData.password}\nВремя: ${new Date().toLocaleString()}`
+        };
+        try {
+            const response = await fetch(formUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            return response.ok;
+        } catch (error) {
+            console.error('Ошибка отправки:', error);
+            return false;
+        }
+    }
+    
+    registerBtn.addEventListener('click', async () => {
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        
+        if(!name || !email || !password) {
+            alert('Пожалуйста, заполните все поля');
+            return;
+        }
+        if(password.length < 6) {
+            alert('Пароль должен содержать минимум 6 символов');
+            return;
+        }
+        if(!email.includes('@') || !email.includes('.')) {
+            alert('Введите корректный email');
+            return;
+        }
+        
+        localStorage.setItem('richPugaUser', JSON.stringify({ name, email, password: btoa(password) }));
+        
+        const sent = await sendToEmail({ name, email, password });
+        
+        if(sent) {
+            successMsg.style.display = 'block';
+            successMsg.innerHTML = `✅ Регистрация успешна! Данные отправлены на почту. Добро пожаловать, ${name}!<br>Перенаправление в магазин...`;
+        } else {
+            successMsg.style.display = 'block';
+            successMsg.style.background = '#f8d7da';
+            successMsg.style.color = '#721c24';
+            successMsg.innerHTML = `⚠️ Регистрация сохранена локально, но письмо не отправилось. Проверьте интернет.<br>Перенаправление в магазин...`;
+        }
+        
+        setTimeout(() => {
+            successMsg.style.display = 'none';
+            successMsg.style.background = '#d4edda';
+            successMsg.style.color = '#155724';
+            switchPage('shop');
+            document.getElementById('regName').value = '';
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regPassword').value = '';
+        }, 3000);
+    });
+    
+    updateTotal();
+</script>
+</body>
+</html>
